@@ -1,0 +1,30 @@
+{
+  "name": "luna-web-backend",
+  "version": "1.0.0",
+  "description": "Back do site web do projeto luna",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LunaSquad/Luna-web-Backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/LunaSquad/Luna-web-Backend/issues"
+  },
+  "homepage": "https://github.com/LunaSquad/Luna-web-Backend#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "mongodb": "^7.1.0",
+    "mongoose": "^9.2.2",
+    "nodemon": "^3.1.11"
+  }
+}

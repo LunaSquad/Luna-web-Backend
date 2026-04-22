@@ -37,12 +37,20 @@ const updateEscolaSchema = z.object({
 export const validarCadastro = (req, res, next) => {
   try {
     registroEscolaSchema.parse(req.body);
-    next(); 
+    next();
   } catch (error) {
-    return res.status(400).json({
-      erro: "Erro de validação no cadastro",
-      detalhes: error.errors.map(err => ({ campo: err.path.join('.'), mensagem: err.message }))
-    });
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({
+        erro: "Erro de validação no cadastro",
+        detalhes: error.issues.map(err => ({
+          campo: err.path.join('.'),
+          mensagem: err.message
+        }))
+      });
+    }
+    // Se não for Zod, é um erro de código ou servidor
+    console.error("Erro inesperado no validarCadastro:", error);
+    return res.status(500).json({ erro: "Erro interno no servidor" });
   }
 };
 
@@ -50,11 +58,18 @@ export const validarUpdate = (req, res, next) => {
   try {
     // Usa o esquema flexível!
     updateEscolaSchema.parse(req.body);
-    next(); 
+    next();
   } catch (error) {
-    return res.status(400).json({
-      erro: "Erro de validação na atualização",
-      detalhes: error.errors.map(err => ({ campo: err.path.join('.'), mensagem: err.message }))
-    });
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({
+        erro: "Erro de validação na atualização",
+        detalhes: error.issues.map(err => ({
+          campo: err.path.join('.'),
+          mensagem: err.message
+        }))
+      });
+    }
+    console.error("Erro inesperado no validarUpdate:", error);
+    return res.status(500).json({ erro: "Erro interno no servidor" });
   }
 };

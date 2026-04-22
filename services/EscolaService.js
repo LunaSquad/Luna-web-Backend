@@ -12,14 +12,23 @@ class EscolaService {
       tipoUser: "escola"
     });
 
-    // Criar a escola
-    const novaEscola = new Escola({
-      ...dadosEscola,
-      email: dadosUsuario.email,
-      usuarioId: novoUsuario._id
-    });
+    try {
+      // Criar a escola
+      const novaEscola = new Escola({
+        ...dadosEscola,
+        email: dadosUsuario.email,
+        usuarioId: novoUsuario._id
+      });
 
-    return await novaEscola.save();
+      return await novaEscola.save();
+
+    } catch (error) {
+      // Caso haja um erro na criação da escola, deletamos o usuário criado
+      await Usuario.findByIdAndDelete(novoUsuario._id);
+
+      throw new Error(`Erro ao registrar escola: ${error.message}`);
+    }
+
   }
 
   // 2. READ ALL - Método para listar todas as escolas

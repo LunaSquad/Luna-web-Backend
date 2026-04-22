@@ -15,6 +15,7 @@ class EscolaService {
     // Criar a escola
     const novaEscola = new Escola({
       ...dadosEscola,
+      email: dadosUsuario.email,
       usuarioId: novoUsuario._id
     });
 

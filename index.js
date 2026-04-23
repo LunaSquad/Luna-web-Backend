@@ -4,6 +4,9 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 
+// Imports de Rotas
+import escolaRoutes from './routes/escolaRoutes.js';
+
 // Configurando os servidores DNS
 import dns from 'dns';
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
@@ -15,6 +18,9 @@ dotenv.config();
 // Configurando o Express
 app.use(express.json())
 app.use(cors())
+
+// Configurando as rotas
+app.use('/', escolaRoutes);
 
 // Iniciando a conexão com o banco de dados MongoDB
 const DB_Connection = process.env.DB_URL;

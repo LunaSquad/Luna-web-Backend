@@ -36,12 +36,20 @@ const escolaSchema = new mongoose.Schema(
     telefone: {
       type: String,
       trim: true,
+      match: [
+        /^\d{10,11}$/,
+        "O telefone deve conter entre 10 e 11 dígitos numéricos (apenas números, com DDD)"
+      ],
     },
     cnpj: {
       type: String,
       required: [true, "O CNPJ é obrigatório"],
-      unique: true,
+      unique: true, // Garante que não haja CNPJs duplicados
       trim: true,
+      match: [
+        /^\d{14}$/,
+        "O CNPJ deve conter exatamente 14 dígitos numéricos (sem pontos ou traços)"
+      ],
     },
     endereco: {
       type: enderecoSchema,

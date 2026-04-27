@@ -72,4 +72,4 @@ const professorSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-export default mongoose.model("Professor", professorSchema);
+export default mongoose.model("Professor", professorSchema, "professores");

@@ -8,6 +8,7 @@ import cors from "cors";
 import escolaRoutes from './routes/escolaRoutes.js';
 import professorRoutes from './routes/professorRoutes.js';
 import materiaRoutes from './routes/materiaRoutes.js';
+import turmaRoutes from './routes/turmaRoutes.js';
 
 // Configurando os servidores DNS
 import dns from 'dns';
@@ -25,6 +26,7 @@ app.use(cors())
 app.use('/', escolaRoutes);
 app.use('/', professorRoutes);
 app.use('/', materiaRoutes);
+app.use('/', turmaRoutes);
 
 // Iniciando a conexão com o banco de dados MongoDB
 const DB_Connection = process.env.DB_URL;

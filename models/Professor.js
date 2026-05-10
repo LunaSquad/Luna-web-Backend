@@ -52,6 +52,11 @@ const professorSchema = new mongoose.Schema(
     telefone: {
       type: String,
       trim: true,
+      match: [
+        /^\d{10,11}$/,
+        "O telefone deve conter entre 10 e 11 dígitos numéricos (apenas números, com DDD)"
+      ],
+      required: [true, "O telefone de contato é obrigatório"],
     },
     email: {
       type: String,

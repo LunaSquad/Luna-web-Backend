@@ -44,11 +44,6 @@ const alunoSchema = mongoose.Schema(
       required: [true, "O nome do aluno é obrigatório"],
       trim: true,
     },
-    sobrenome: {
-      type: String,
-      required: [true, "O sobrenome do aluno é obrigatório"],
-      trim: true,
-    },
     cpf: {
       type: String,
       required: [true, "O CPF é obrigatório"],
@@ -59,14 +54,34 @@ const alunoSchema = mongoose.Schema(
       type: Date,
       required: [true, "A data de nascimento é obrigatória"],
     },
-    ra: {
-      type: Number,
-      required: [true, "O RA é obrigatório"],
-      unique: true,
+    telefone: {
+      type: String,
+      trim: true,
+      match: [
+        /^\d{10,11}$/,
+        "O telefone deve conter entre 10 e 11 dígitos numéricos (apenas números, com DDD)"
+      ],
+      required: [true, "O telefone de contato é obrigatório"],
+    },
+    email: {
+      type: String,
+      required: [true, "O email é obrigatório"],
+      unique: true, // Garante que não haja emails duplicados
+      lowercase: true,
+      trim: true,
+      match: [
+        /.+\@.+\..+/,
+        "Por favor, insira um email válido",
+      ],
     },
     nomeResponsavel: {
       type: String,
       required: [true, "O nome do responsável é obrigatório"],
+      trim: true,
+    },
+    cpfResponsavel: {
+      type: String,
+      required: [true, "O CPF do responsável é obrigatório"],
       trim: true,
     },
     urlFotoAluno: {

@@ -1,22 +1,23 @@
 import { Router } from "express";
 import TurmaController from "../controllers/TurmaController.js";
 import { validarCadastroTurma, validarUpdateTurma } from "../middlewares/validarTurma.js";
+import { auth } from "../middlewares/auth.js";
 
 const routes = Router();
 
 // 1. CREATE
-routes.post("/turmas", validarCadastroTurma, TurmaController.criar);
+routes.post("/turmas", auth, validarCadastroTurma, TurmaController.criar);
 
 // 2. READ ALL
-routes.get("/turmas", TurmaController.listar);
+routes.get("/turmas", auth, TurmaController.listar);
 
 // 3. READ ONE
-routes.get("/turmas/:id", TurmaController.buscarPorId);
+routes.get("/turmas/:id", auth, TurmaController.buscarPorId);
 
 // 4. UPDATE
-routes.put("/turmas/:id", validarUpdateTurma, TurmaController.atualizar);
+routes.put("/turmas/:id", auth, validarUpdateTurma, TurmaController.atualizar);
 
 // 5. DELETE
-routes.delete("/turmas/:id", TurmaController.deletar);
+routes.delete("/turmas/:id", auth, TurmaController.deletar);
 
 export default routes;

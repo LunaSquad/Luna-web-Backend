@@ -7,6 +7,8 @@ class AlunoController {
     try {
       // Dados já validados via middleware Zod
       const { dadosAluno, dadosUsuario } = req.body;
+
+      dadosAluno.escolaId = req.usuario.escolaId;
       
       const novoAluno = await AlunoService.registrar(dadosAluno, dadosUsuario);
 
@@ -22,7 +24,7 @@ class AlunoController {
   // 2. READ ALL (GET /alunos)
   async listar(req, res) {
     try {
-      const alunos = await AlunoService.listarTodos();
+      const alunos = await AlunoService.listarTodos(req.usuario.escolaId);
       return res.status(200).json(alunos);
     } catch (error) {
       return res.status(500).json({ erro: "Erro interno ao listar os alunos." });
@@ -33,7 +35,7 @@ class AlunoController {
   async buscarPorId(req, res) {
     try {
       const { id } = req.params;
-      const aluno = await AlunoService.buscarPorId(id);
+      const aluno = await AlunoService.buscarPorId(id, req.usuario.escolaId);
 
       return res.status(200).json(aluno);
     } catch (error) {
@@ -47,7 +49,7 @@ class AlunoController {
       const { id } = req.params;
       const dadosAtualizados = req.body;
 
-      const alunoAtualizado = await AlunoService.atualizar(id, dadosAtualizados);
+      const alunoAtualizado = await AlunoService.atualizar(id, dadosAtualizados, req.usuario.escolaId);
 
       return res.status(200).json({ 
         mensagem: "Os dados do aluno foram atualizados com sucesso!",
@@ -62,7 +64,7 @@ class AlunoController {
   async deletar(req, res) {
     try {
       const { id } = req.params;
-      const resultado = await AlunoService.deletar(id);
+      const resultado = await AlunoService.deletar(id, req.usuario.escolaId);
 
       return res.status(200).json(resultado);
     } catch (error) {

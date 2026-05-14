@@ -45,7 +45,7 @@ class EscolaController {
   // 4. UPDATE (PUT /escolas/:id)
   async atualizar(req, res) {
     try {
-      const { id } = req.params;
+      const idSeguro = req.usuario.escolaId;
       const dadosAtualizados = req.body;
 
       const escolaAtualizada = await EscolaService.atualizar(id, dadosAtualizados);
@@ -54,7 +54,7 @@ class EscolaController {
         mensagem: "Os dados da escola foram atualizados com sucesso!",
         escola: escolaAtualizada
       });
-      
+
     } catch (error) {
       return res.status(400).json({ erro: error.message });
     }
@@ -63,7 +63,7 @@ class EscolaController {
   // 5. DELETE (DELETE /escolas/:id)
   async deletar(req, res) {
     try {
-      const { id } = req.params;
+      const idSeguro = req.usuario.escolaId;
       const resultado = await EscolaService.deletar(id);
 
       return res.status(200).json(resultado);

@@ -14,6 +14,7 @@ class EscolaController {
         mensagem: "Escola registrada com sucesso!",
         escola: novaEscola
       });
+
     } catch (error) {
       return res.status(400).json({ erro: error.message });
     }
@@ -22,8 +23,9 @@ class EscolaController {
   // 2. READ ALL (GET /escolas)
   async listar(req, res) {
     try {
-      const escolas = await EscolaService.listarTodas();
-      return res.status(200).json(escolas);
+      const minhaEscola = await EscolaService.buscarPorId(req.usuario.escolaId);
+      return res.status(200).json([minhaEscola]);
+
     } catch (error) {
       return res.status(500).json({ erro: "Erro interno - Ocorreu um erro ao listar as escolas." });
     }
@@ -32,10 +34,9 @@ class EscolaController {
   // 3. READ ONE (GET /escolas/:id)
   async buscarPorId(req, res) {
     try {
-      const { id } = req.params;
-      const escola = await EscolaService.buscarPorId(id);
-
+      const escola = await EscolaService.buscarPorId(req.usuario.escolaId);
       return res.status(200).json(escola);
+
     } catch (error) {
       return res.status(404).json({ erro: error.message });
     }
@@ -44,7 +45,7 @@ class EscolaController {
   // 4. UPDATE (PUT /escolas/:id)
   async atualizar(req, res) {
     try {
-      const { id } = req.params;
+      const idSeguro = req.usuario.escolaId;
       const dadosAtualizados = req.body;
 
       const escolaAtualizada = await EscolaService.atualizar(id, dadosAtualizados);
@@ -53,6 +54,7 @@ class EscolaController {
         mensagem: "Os dados da escola foram atualizados com sucesso!",
         escola: escolaAtualizada
       });
+
     } catch (error) {
       return res.status(400).json({ erro: error.message });
     }
@@ -61,7 +63,7 @@ class EscolaController {
   // 5. DELETE (DELETE /escolas/:id)
   async deletar(req, res) {
     try {
-      const { id } = req.params;
+      const idSeguro = req.usuario.escolaId;
       const resultado = await EscolaService.deletar(id);
 
       return res.status(200).json(resultado);

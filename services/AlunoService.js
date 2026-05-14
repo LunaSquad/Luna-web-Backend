@@ -30,16 +30,16 @@ class AlunoService {
   }
 
   // 2. READ ALL - Método para listar todos os alunos
-  async listarTodos() {
-    return await Aluno.find()
+  async listarTodos(escolaId) {
+    return await Aluno.find({ escolaId })
       .populate("usuarioId", "email tipoUser")
       .populate("escolaId", "nome cnpj")
       .populate("turmaId", "nome");
   }
 
   // 3. READ ONE - Método para buscar um aluno por ID
-  async buscarPorId(id) {
-    const aluno = await Aluno.findById(id)
+  async buscarPorId(id, escolaId) {
+    const aluno = await Aluno.findOne({ _id: id, escolaId })
       .populate("usuarioId", "email tipoUser")
       .populate("escolaId", "nome")
       .populate("turmaId", "nome");
@@ -51,8 +51,12 @@ class AlunoService {
   }
 
   // 4. UPDATE - Método para atualizar os dados do aluno
-  async atualizar(id, dadosAtualizados) {
-    const alunoAtualizado = await Aluno.findByIdAndUpdate(id, dadosAtualizados, { new: true });
+  async atualizar(id, dadosAtualizados, escolaId) {
+    const alunoAtualizado = await Aluno.findOneAndUpdate(
+      { _id: id, escolaId},
+      dadosAtualizados, 
+      { new: true }
+    );
 
     if (!alunoAtualizado) {
       throw new Error("Aluno não encontrado para a atualização.");
@@ -61,8 +65,8 @@ class AlunoService {
   }
 
   // 5. DELETE - Método para excluir um aluno
-  async deletar(id) {
-    const aluno = await Aluno.findById(id);
+  async deletar(id, escolaId) {
+    const aluno = await Aluno.findOne({ _id: id, escolaId });
 
     if (!aluno) {
       throw new Error("Aluno não encontrado para a exclusão.");

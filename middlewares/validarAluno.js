@@ -10,7 +10,6 @@ const registroAlunoSchema = z.object({
     senha: z.string().min(6, "A senha deve ter pelo menos 6 caracteres.")
   }),
   dadosAluno: z.object({
-    escolaId: z.string().regex(objectIdRegex, "ID de escola inválido."),
     // turmaId é opcional no momento da criação, pois o aluno pode ser cadastrado antes da enturmação
     turmaId: z.string().regex(objectIdRegex, "ID de turma inválido.").optional(),
     nome: z.string().min(2, "O nome deve ter no mínimo 2 letras."),

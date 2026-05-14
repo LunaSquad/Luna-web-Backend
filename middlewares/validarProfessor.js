@@ -10,7 +10,6 @@ const registroProfessorSchema = z.object({
     senha: z.string().min(6, "A palavra-passe deve ter pelo menos 6 caracteres.")
   }),
   dadosProfessor: z.object({
-    escolaId: z.string().regex(objectIdRegex, "ID de escola inválido."),
     nome: z.string().min(2, "O nome deve ter no mínimo 2 letras."),
     sobrenome: z.string().min(2, "O sobrenome deve ter no mínimo 2 letras."),
     cpf: z.string().regex(/^\d{11}$/, "O CPF deve conter exatamente 11 números (sem pontos ou traços)."),

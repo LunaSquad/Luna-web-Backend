@@ -7,13 +7,16 @@ class ProfessorController {
     try {
       // Dados já validados via middleware Zod
       const { dadosProfessor, dadosUsuario } = req.body;
-      
+
+      dadosProfessor.escolaId = req.usuario.escolaId;
+
       const novoProfessor = await ProfessorService.registrar(dadosProfessor, dadosUsuario);
 
       return res.status(201).json({
         mensagem: "Professor registado com sucesso!",
         professor: novoProfessor
       });
+
     } catch (error) {
       return res.status(400).json({ erro: error.message });
     }
@@ -22,8 +25,9 @@ class ProfessorController {
   // 2. READ ALL (GET /professores)
   async listar(req, res) {
     try {
-      const professores = await ProfessorService.listarTodos();
+      const professores = await ProfessorService.listarTodos(req.usuario.escolaId);
       return res.status(200).json(professores);
+
     } catch (error) {
       return res.status(500).json({ erro: "Erro interno ao listar os professores." });
     }
@@ -33,9 +37,10 @@ class ProfessorController {
   async buscarPorId(req, res) {
     try {
       const { id } = req.params;
-      const professor = await ProfessorService.buscarPorId(id);
+      const professor = await ProfessorService.buscarPorId(id, req.usuario.escolaId);
 
       return res.status(200).json(professor);
+
     } catch (error) {
       return res.status(404).json({ erro: error.message });
     }
@@ -47,12 +52,13 @@ class ProfessorController {
       const { id } = req.params;
       const dadosAtualizados = req.body;
 
-      const professorAtualizado = await ProfessorService.atualizar(id, dadosAtualizados);
+      const professorAtualizado = await ProfessorService.atualizar(id, dadosAtualizados, req.usuario.escolaId);
 
       return res.status(200).json({ 
         mensagem: "Os dados do professor foram atualizados com sucesso!",
         professor: professorAtualizado
       });
+
     } catch (error) {
       return res.status(400).json({ erro: error.message });
     }
@@ -62,9 +68,10 @@ class ProfessorController {
   async deletar(req, res) {
     try {
       const { id } = req.params;
-      const resultado = await ProfessorService.deletar(id);
+      const resultado = await ProfessorService.deletar(id, req.usuario.escolaId);
 
       return res.status(200).json(resultado);
+
     } catch (error) {
       return res.status(400).json({ erro: error.message });
     }

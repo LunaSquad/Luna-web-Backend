@@ -1,3 +1,4 @@
+import { v2 as cloudinary } from 'cloudinary';
 import EscolaService from "../services/EscolaService.js";
 
 class EscolaController {
@@ -8,6 +9,10 @@ class EscolaController {
       // Dados já validades via middleware Zod
       const { dadosEscola, dadosUsuario } = req.body;
 
+      if (req.file) {
+        dadosEscola.urlFotoEscola = req.file.path; 
+      }
+
       const novaEscola = await EscolaService.registrar(dadosEscola, dadosUsuario);
 
       return res.status(201).json({
@@ -16,6 +21,15 @@ class EscolaController {
       });
 
     } catch (error) {
+      if (req.file && req.file.filename) {
+        try {
+          await cloudinary.uploader.destroy(req.file.filename);
+          console.log(`Rollback efetuado: Imagem ${req.file.filename} apagada da nuvem.`);
+        } catch (cloudinaryError) {
+          console.error("Erro ao tentar apagar imagem órfã da nuvem:", cloudinaryError);
+        }
+      }
+
       return res.status(400).json({ erro: error.message });
     }
   }
@@ -48,7 +62,11 @@ class EscolaController {
       const idSeguro = req.usuario.escolaId;
       const dadosAtualizados = req.body;
 
-      const escolaAtualizada = await EscolaService.atualizar(id, dadosAtualizados);
+      if (req.file) {
+        dadosAtualizados.urlFotoEscola = req.file.path;
+      }
+
+      const escolaAtualizada = await EscolaService.atualizar(idSeguro, dadosAtualizados);
 
       return res.status(200).json({ 
         mensagem: "Os dados da escola foram atualizados com sucesso!",
@@ -64,7 +82,7 @@ class EscolaController {
   async deletar(req, res) {
     try {
       const idSeguro = req.usuario.escolaId;
-      const resultado = await EscolaService.deletar(id);
+      const resultado = await EscolaService.deletar(idSeguro);
 
       return res.status(200).json(resultado);
     } catch (error) {

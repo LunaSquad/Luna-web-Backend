@@ -1,6 +1,16 @@
 import Escola from '../models/Escola.js';
 import Usuario from '../models/Usuario.js';
 import UsuarioService from "./UsuarioService.js";
+import { v2 as cloudinary } from 'cloudinary';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 class EscolaService {
 
@@ -62,6 +72,16 @@ class EscolaService {
 
     if (!escola) {
       throw new Error ("Escola não encontrada para a exclusão");
+    }
+
+    if (escola.urlFotoEscola) {
+      try {
+        const partes = escola.urlFotoEscola.split('/');
+        const publicId = partes.slice(-3).join('/').split('.')[0]; 
+        await cloudinary.uploader.destroy(publicId);
+      } catch (err) {
+        console.error("Erro ao apagar logo da escola no Cloudinary:", err);
+      }
     }
 
     // Deleta a escola

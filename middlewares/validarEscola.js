@@ -34,7 +34,7 @@ const updateEscolaSchema = z.object({
 
 // --- MIDDLEWARES ---
 
-export const validarCadastro = (req, res, next) => {
+export const validarCadastroEscola = (req, res, next) => {
   try {
     registroEscolaSchema.parse(req.body);
     next();
@@ -54,7 +54,7 @@ export const validarCadastro = (req, res, next) => {
   }
 };
 
-export const validarUpdate = (req, res, next) => {
+export const validarUpdateEscola = (req, res, next) => {
   try {
     // Usa o esquema flexível!
     updateEscolaSchema.parse(req.body);

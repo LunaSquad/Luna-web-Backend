@@ -1,8 +1,12 @@
 import Escola from '../models/Escola.js';
 import Usuario from '../models/Usuario.js';
+import Aluno from '../models/Aluno.js';
+import Professor from '../models/Professor.js';
+import Turma from '../models/Turma.js';
 import UsuarioService from "./UsuarioService.js";
 import { v2 as cloudinary } from 'cloudinary';
 import dotenv from 'dotenv';
+
 
 dotenv.config();
 
@@ -41,24 +45,27 @@ class EscolaService {
 
   }
 
+
   // 2. READ ALL - Método para listar todas as escolas
   async listarTodas() {
     return await Escola.find().populate("usuarioId", "email tipoUser");
   }
+
 
   // 3. READ ONE - Métodos para buscar uma escola por ID
   async buscarPorId(id) {
     const escola = await Escola.findById(id).populate("usuarioId", "email tipoUser");
 
     if (!escola) {
-      throw new Error ("Escola não encontrada");
+      throw new Error("Escola não encontrada");
     }
     return escola;
   }
 
+
   // 4. UPDATE - Método para atualizar os dados da escola
   async atualizar(id, dadosAtualizados) {
-    const escolaAtualizada = await Escola.findByIdAndUpdate(id, dadosAtualizados, {new : true});
+    const escolaAtualizada = await Escola.findByIdAndUpdate(id, dadosAtualizados, { new: true });
 
     if (!escolaAtualizada) {
       throw new Error("Escola não encontrada para a atualização");
@@ -66,31 +73,50 @@ class EscolaService {
     return escolaAtualizada;
   }
 
+
   // 5. DELETE - Método para excluir uma escola
   async deletar(id) {
     const escola = await Escola.findById(id);
 
     if (!escola) {
-      throw new Error ("Escola não encontrada para a exclusão");
+      throw new Error("Escola não encontrada para a exclusão");
     }
 
     if (escola.urlFotoEscola) {
       try {
         const partes = escola.urlFotoEscola.split('/');
-        const publicId = partes.slice(-3).join('/').split('.')[0]; 
+        const publicId = partes.slice(-3).join('/').split('.')[0];
         await cloudinary.uploader.destroy(publicId);
       } catch (err) {
         console.error("Erro ao apagar logo da escola no Cloudinary:", err);
       }
     }
 
-    // Deleta a escola
     await Escola.findByIdAndDelete(id);
 
-    // Deleta o usuário associado
     await Usuario.findByIdAndDelete(escola.usuarioId);
 
     return { mensagem: "Escola e dados de acesso excluídas com sucesso." };
+  }
+
+
+  // ESTATÍSTICAS - Método para buscar estatísticas da escola
+  async buscarEstatisticas(escolaId) {
+    try {
+      const [totalAlunos, totalProfessores, turmasAtivas] = await Promise.all([
+        Aluno.countDocuments({ escolaId }),
+        Professor.countDocuments({ escolaId }),
+        Turma.countDocuments({ escolaId })
+      ]);
+
+      return {
+        totalAlunos,
+        totalProfessores,
+        turmasAtivas
+      };
+    } catch (error) {
+      throw new Error(`Erro ao buscar estatísticas: ${error.message}`);
+    }
   }
 }
 

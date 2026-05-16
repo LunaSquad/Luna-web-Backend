@@ -12,6 +12,9 @@ routes.post("/escolas", uploadEscola.single('foto'), validarCadastroEscola, Esco
 // 2. READ ALL
 routes.get("/escolas", auth, EscolaController.listar);
 
+// ESTATÍSTICAS
+routes.get("/escolas/estatisticas", auth, EscolaController.obterEstatisticas);
+
 // 3. READ ONE
 routes.get("/escolas/:id", auth, EscolaController.buscarPorId);
 
@@ -20,5 +23,6 @@ routes.put("/escolas/:id", uploadEscola.single('foto'), auth, validarUpdateEscol
 
 // 5. DELETE
 routes.delete("/escolas/:id", auth, EscolaController.deletar);
+
 
 export default routes;

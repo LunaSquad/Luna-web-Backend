@@ -6,15 +6,15 @@ const objectIdRegex = /^[0-9a-fA-F]{24}$/;
 // 1. Esquema de Validação para o Cadastro da Turma
 const registroTurmaSchema = z.object({
   nome: z.string().min(2, "O nome da turma deve ter no mínimo 2 caracteres."),
-  // professorId é opcional no momento da criação da turma
-  professorId: z.string().regex(objectIdRegex, "ID de professor inválido.")
+  professorId: z.string().regex(objectIdRegex, "ID de professor inválido."),
+  alunosIds: z.array(z.string().regex(objectIdRegex)).optional()
 });
 
 // 2. Esquema de Validação para a Atualização da Turma
 const updateTurmaSchema = z.object({
   nome: z.string().min(2, "O nome da turma deve ter no mínimo 2 caracteres."),
   professorId: z.string().regex(objectIdRegex, "ID de professor inválido.")
-}).partial(); // O partial permite enviar apenas o campo que deseja atualizar
+}).partial();
 
 // --- MIDDLEWARES ---
 export const validarCadastroTurma = (req, res, next) => {

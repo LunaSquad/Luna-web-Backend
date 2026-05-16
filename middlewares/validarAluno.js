@@ -10,7 +10,6 @@ const registroAlunoSchema = z.object({
     senha: z.string().min(6, "A senha deve ter pelo menos 6 caracteres.")
   }),
   dadosAluno: z.object({
-    // turmaId é opcional no momento da criação, pois o aluno pode ser cadastrado antes da enturmação
     turmaId: z.string().regex(objectIdRegex, "ID de turma inválido.").optional(),
     nome: z.string().min(2, "O nome deve ter no mínimo 2 letras."),
     cpf: z.string().regex(/^\d{11}$/, "O CPF deve conter exatamente 11 números (sem pontos ou traços)."),
@@ -18,7 +17,6 @@ const registroAlunoSchema = z.object({
     telefone: z.string().regex(/^\d{10,11}$/, "O telefone deve conter entre 10 e 11 dígitos numéricos."),
     nomeResponsavel: z.string().min(2, "O nome do responsável é obrigatório."),
     cpfResponsavel: z.string().regex(/^\d{11}$/, "O CPF do responsável deve conter exatamente 11 números.")
-    // Os campos de URL e Hiperfoco foram omitidos aqui pois serão preenchidos via Mobile ou têm valor padrão
   })
 });
 
@@ -32,7 +30,7 @@ const updateAlunoSchema = z.object({
   telefone: z.string().regex(/^\d{10,11}$/, "O telefone deve conter entre 10 e 11 dígitos numéricos."),
   nomeResponsavel: z.string().min(2, "O nome do responsável é obrigatório."),
   cpfResponsavel: z.string().regex(/^\d{11}$/, "O CPF do responsável deve conter exatamente 11 números.")
-}).partial(); // O partial deixa tudo opcional na hora do PUT, atualizando só o que foi enviado
+}).partial();
 
 // --- MIDDLEWARES ---
 

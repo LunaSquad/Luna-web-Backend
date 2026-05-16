@@ -5,7 +5,6 @@ class AlunoController {
   // 1. CREATE (POST /alunos)
   async criar(req, res) {
     try {
-      // Dados já validados via middleware Zod
       const { dadosAluno, dadosUsuario } = req.body;
 
       dadosAluno.escolaId = req.usuario.escolaId;
@@ -48,12 +47,19 @@ class AlunoController {
   // 2. READ ALL (GET /alunos)
   async listar(req, res) {
     try {
-      const alunos = await AlunoService.listarTodos(req.usuario.escolaId);
+      const { escolaId } = req.usuario;
+      const { semTurma, turmaId } = req.query;
+
+      const alunos = await AlunoService.listarTodos(
+        escolaId,
+        semTurma === 'true',
+        turmaId
+      );
+
       return res.status(200).json(alunos);
     } catch (error) {
-      return res
-        .status(500)
-        .json({ erro: "Erro interno ao listar os alunos." });
+      console.error("Erro no Controller Aluno:", error.message);
+      return res.status(400).json({ erro: "Erro interno ao listar os alunos." });
     }
   }
 
@@ -74,6 +80,15 @@ class AlunoController {
     try {
       const { id } = req.params;
       const dadosAtualizados = req.body;
+
+      if (req.files) {
+        if (req.files.foto) {
+          dadosAtualizados.urlFotoAluno = req.files.foto[0].path;
+        }
+        if (req.files.laudo) {
+          dadosAtualizados.urlFotoLaudo = req.files.laudo[0].path;
+        }
+      }
 
       const alunoAtualizado = await AlunoService.atualizar(
         id,

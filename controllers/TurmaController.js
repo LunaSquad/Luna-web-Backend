@@ -5,7 +5,6 @@ class TurmaController {
   // 1. CREATE (POST /turmas)
   async criar(req, res) {
     try {
-      // Dados já validados via middleware Zod
       const dadosTurma = req.body;
 
       dadosTurma.escolaId = req.usuario.escolaId;

@@ -6,7 +6,6 @@ class ProfessorController {
   // 1. CREATE (POST /professores)
   async criar(req, res) {
     try {
-      // Dados já validados via middleware Zod
       const { dadosProfessor, dadosUsuario } = req.body;
 
       dadosProfessor.escolaId = req.usuario.escolaId;
@@ -65,6 +64,10 @@ class ProfessorController {
       const { id } = req.params;
       const dadosAtualizados = req.body;
 
+      if (req.file) {
+        dadosAtualizados.urlFotoProfessor = req.file.path;
+      }
+
       const professorAtualizado = await ProfessorService.atualizar(id, dadosAtualizados, req.usuario.escolaId);
 
       return res.status(200).json({
@@ -85,6 +88,18 @@ class ProfessorController {
 
       return res.status(200).json(resultado);
 
+    } catch (error) {
+      return res.status(400).json({ erro: error.message });
+    }
+  }
+
+  async obterTurma(req, res) {
+    try {
+      const usuarioId = req.usuario.id;
+      
+      const dadosTurma = await ProfessorService.buscarTurmaDoProfessor(usuarioId);
+      
+      return res.status(200).json(dadosTurma);
     } catch (error) {
       return res.status(400).json({ erro: error.message });
     }

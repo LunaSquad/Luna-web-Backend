@@ -28,8 +28,8 @@ const updateEscolaSchema = z.object({
     cidade: z.string().min(1, "A cidade é obrigatória."),
     bairro: z.string().min(1, "O bairro é obrigatório."),
     rua: z.string().min(1, "A rua é obrigatória.")
-  }).partial() // Deixa os campos de endereço opcionais também
-}).partial(); // O .partial() principal torna nome, telefone e endereco opcionais!
+  }).partial()
+}).partial();
 
 
 // --- MIDDLEWARES ---
@@ -48,7 +48,6 @@ export const validarCadastroEscola = (req, res, next) => {
         }))
       });
     }
-    // Se não for Zod, é um erro de código ou servidor
     console.error("Erro inesperado no validarCadastro:", error);
     return res.status(500).json({ erro: "Erro interno no servidor" });
   }

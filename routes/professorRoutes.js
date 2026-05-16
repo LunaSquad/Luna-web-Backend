@@ -12,6 +12,9 @@ routes.post("/professores", auth, uploadProfessor.single('foto'), validarCadastr
 // 2. READ ALL
 routes.get("/professores", auth, ProfessorController.listar);
 
+// BUSCAR TURMA DO PROFESSOR
+routes.get("/professores/turma", auth, ProfessorController.obterTurma);
+
 // 3. READ ONE
 routes.get("/professores/:id", auth, ProfessorController.buscarPorId);
 

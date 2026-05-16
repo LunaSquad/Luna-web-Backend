@@ -1,6 +1,16 @@
 import Professor from '../models/Professor.js';
 import Usuario from '../models/Usuario.js';
 import UsuarioService from "./UsuarioService.js";
+import { v2 as cloudinary } from 'cloudinary';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 class ProfessorService {
 
@@ -70,6 +80,16 @@ class ProfessorService {
 
     if (!professor) {
       throw new Error("Professor não encontrado para a exclusão.");
+    }
+
+    if (professor.urlFotoProfessor) {
+      try {
+        const partes = professor.urlFotoProfessor.split('/');
+        const publicId = partes.slice(-3).join('/').split('.')[0];
+        await cloudinary.uploader.destroy(publicId);
+      } catch (cloudinaryError) {
+        console.error("Erro ao apagar a foto do professor no Cloudinary:", cloudinaryError);
+      }
     }
 
     // Apaga o professor

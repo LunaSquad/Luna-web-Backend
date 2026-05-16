@@ -1,3 +1,4 @@
+import { v2 as cloudinary } from 'cloudinary';
 import ProfessorService from "../services/ProfessorService.js";
 
 class ProfessorController {
@@ -10,6 +11,10 @@ class ProfessorController {
 
       dadosProfessor.escolaId = req.usuario.escolaId;
 
+      if (req.file) {
+        dadosProfessor.urlFotoProfessor = req.file.path;
+      }
+
       const novoProfessor = await ProfessorService.registrar(dadosProfessor, dadosUsuario);
 
       return res.status(201).json({
@@ -18,6 +23,14 @@ class ProfessorController {
       });
 
     } catch (error) {
+      if (req.file && req.file.filename) {
+        try {
+          await cloudinary.uploader.destroy(req.file.filename);
+        } catch (cloudinaryError) {
+          console.error("Erro ao tentar deletar imagem órfã do Cloudinary:", cloudinaryError);
+        }
+      }
+
       return res.status(400).json({ erro: error.message });
     }
   }
@@ -54,7 +67,7 @@ class ProfessorController {
 
       const professorAtualizado = await ProfessorService.atualizar(id, dadosAtualizados, req.usuario.escolaId);
 
-      return res.status(200).json({ 
+      return res.status(200).json({
         mensagem: "Os dados do professor foram atualizados com sucesso!",
         professor: professorAtualizado
       });

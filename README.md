@@ -98,7 +98,7 @@ Abaixo estão os principais endpoints expostos pelo Back-end para o consumo do f
 | GET/POST/PUT/DELETE | `/turmas` | CRUD de turmas escolares |
 | GET | `/materias` | Listagem das matérias cadastradas |
 
-> **Nota:** Todas as rotas (exceto o `/login`) são protegidas e exigem a passagem do token JWT no header: `Authorization: Bearer <token>`
+> **Nota:** As rotas de `/login`, listagem de `/materias` e a criação de conta em `/escolas` (POST) são públicas. Todas as demais rotas exigem a passagem do token JWT no header: `Authorization: Bearer <token>`.
 
 ---
 

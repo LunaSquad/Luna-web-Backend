@@ -14,11 +14,6 @@ const professorSchema = new mongoose.Schema(
       required: [true, "O professor precisa estar vinculado a uma escola"],
       index: true,
     },
-    turmaId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Turma",
-      default: null,
-    },
     nome: {
       type: String,
       required: [true, "O nome do professor é obrigatório"],

@@ -7,6 +7,7 @@ class MateriaService {
     // Busca as matérias em ordem alfabética
     return await Materia.find().sort({ nome: 1 }); 
   }
+  
 
   // 2. READ ONE - Método para buscar uma matéria por ID
   async buscarPorId(id) {

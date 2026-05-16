@@ -14,7 +14,7 @@ class AuthController {
         return res.status(401).json({ erro: "E-mail ou senha inválidos." });
       }
 
-      // Bloqueia o acesso se for aluno
+
       if (usuario.tipoUser === "aluno") {
         return res.status(403).json({
           erro: "Acesso negado. O Web é restrito para Escolas e Professores. Por favor, utilize o aplicativo móvel."
@@ -27,16 +27,25 @@ class AuthController {
       }
 
       let escolaId = null;
+      let nomePerfil = "";
+      let fotoPerfil = "";
 
       if (usuario.tipoUser === "escola") {
         const escola = await Escola.findOne({ usuarioId: usuario._id });
-        if (escola) escolaId = escola._id;
+        if (escola) {
+          escolaId = escola._id;
+          nomePerfil = escola.nome;
+          fotoPerfil = escola.urlFotoEscola; 
+        }
       } else if (usuario.tipoUser === "professor") {
         const professor = await Professor.findOne({ usuarioId: usuario._id });
-        if (professor) escolaId = professor.escolaId;
+        if (professor) {
+          escolaId = professor.escolaId;
+          nomePerfil = professor.nome;
+          fotoPerfil = professor.urlFotoProfessor;
+        }
       }
 
-      // Segurança: Caso o usuário não tenha um perfil correspondente, é bloqueado.
       if (!escolaId) {
         return res.status(500).json({ erro: "Erro de integridade: Perfil associado não encontrado." });
       }
@@ -60,7 +69,9 @@ class AuthController {
           id: usuario._id,
           email: usuario.email,
           tipoUser: usuario.tipoUser,
-          escolaId: escolaId
+          escolaId: escolaId,
+          nome: nomePerfil,
+          foto: fotoPerfil
         }
       });
 

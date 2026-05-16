@@ -15,7 +15,7 @@ const criarUploader = (nomeDaPasta) => {
   const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
-      folder: `luna_uploads/${nomeDaPasta}`, // Aqui a mágica acontece!
+      folder: `luna_uploads/${nomeDaPasta}`,
       allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'pdf'], 
     },
   });

@@ -6,7 +6,6 @@ class EscolaController {
   // 1. CREATE (POST /escolas)
   async criar(req, res) {
     try {
-      // Dados já validades via middleware Zod
       const { dadosEscola, dadosUsuario } = req.body;
 
       if (req.file) {
@@ -87,6 +86,17 @@ class EscolaController {
       return res.status(200).json(resultado);
     } catch (error) {
       return res.status(400).json({ erro: error.message });
+    }
+  }
+
+  // 6. ESTATÍSTICAS (GET /escolas/estatisticas)
+  async obterEstatisticas(req, res) {
+    try {
+      // O ID da escola vem do token (req.usuario)
+      const stats = await EscolaService.buscarEstatisticas(req.usuario.escolaId);
+      return res.status(200).json(stats);
+    } catch (error) {
+      return res.status(500).json({ erro: error.message });
     }
   }
 }

@@ -1,7 +1,7 @@
+import { v2 as cloudinary } from 'cloudinary';
 import AlunoService from "../services/AlunoService.js";
 
 class AlunoController {
-
   // 1. CREATE (POST /alunos)
   async criar(req, res) {
     try {
@@ -9,14 +9,38 @@ class AlunoController {
       const { dadosAluno, dadosUsuario } = req.body;
 
       dadosAluno.escolaId = req.usuario.escolaId;
-      
+
+      if (req.files) {
+        if (req.files["foto"]) {
+          dadosAluno.urlFotoAluno = req.files["foto"][0].path;
+        }
+        if (req.files["laudo"]) {
+          dadosAluno.urlFotoLaudo = req.files["laudo"][0].path;
+        }
+      }
+
       const novoAluno = await AlunoService.registrar(dadosAluno, dadosUsuario);
 
       return res.status(201).json({
         mensagem: "Aluno registrado com sucesso!",
-        aluno: novoAluno
+        aluno: novoAluno,
       });
+
     } catch (error) {
+      if (req.files) {
+        try {
+          const arquivosEnviados = Object.values(req.files).flat();
+
+          for (const arquivo of arquivosEnviados) {
+            if (arquivo.filename) {
+              await cloudinary.uploader.destroy(arquivo.filename);
+            }
+          }
+        } catch (cloudinaryError) {
+          console.error("Erro ao fazer rollback dos arquivos do aluno:", cloudinaryError);
+        }
+      }
+
       return res.status(400).json({ erro: error.message });
     }
   }
@@ -27,7 +51,9 @@ class AlunoController {
       const alunos = await AlunoService.listarTodos(req.usuario.escolaId);
       return res.status(200).json(alunos);
     } catch (error) {
-      return res.status(500).json({ erro: "Erro interno ao listar os alunos." });
+      return res
+        .status(500)
+        .json({ erro: "Erro interno ao listar os alunos." });
     }
   }
 
@@ -49,11 +75,15 @@ class AlunoController {
       const { id } = req.params;
       const dadosAtualizados = req.body;
 
-      const alunoAtualizado = await AlunoService.atualizar(id, dadosAtualizados, req.usuario.escolaId);
+      const alunoAtualizado = await AlunoService.atualizar(
+        id,
+        dadosAtualizados,
+        req.usuario.escolaId,
+      );
 
-      return res.status(200).json({ 
+      return res.status(200).json({
         mensagem: "Os dados do aluno foram atualizados com sucesso!",
-        aluno: alunoAtualizado
+        aluno: alunoAtualizado,
       });
     } catch (error) {
       return res.status(400).json({ erro: error.message });

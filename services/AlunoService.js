@@ -1,6 +1,16 @@
 import Aluno from '../models/Aluno.js';
 import Usuario from '../models/Usuario.js';
 import UsuarioService from "./UsuarioService.js";
+import { v2 as cloudinary } from 'cloudinary';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 class AlunoService {
 
@@ -70,6 +80,26 @@ class AlunoService {
 
     if (!aluno) {
       throw new Error("Aluno não encontrado para a exclusão.");
+    }
+
+    if (aluno.urlFotoAluno) {
+      try {
+        const partes = aluno.urlFotoAluno.split('/');
+        const publicId = partes.slice(-3).join('/').split('.')[0];
+        await cloudinary.uploader.destroy(publicId);
+      } catch (err) {
+        console.error("Erro ao apagar foto do aluno no Cloudinary:", err);
+      }
+    }
+
+    if (aluno.urlFotoLaudo) {
+      try {
+        const partes = aluno.urlFotoLaudo.split('/');
+        const publicId = partes.slice(-3).join('/').split('.')[0];
+        await cloudinary.uploader.destroy(publicId);
+      } catch (err) {
+        console.error("Erro ao apagar laudo do aluno no Cloudinary:", err);
+      }
     }
 
     // Apaga o aluno

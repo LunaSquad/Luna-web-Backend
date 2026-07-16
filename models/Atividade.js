@@ -2,12 +2,6 @@ import mongoose from "mongoose";
 
 const atividadeSchema = new mongoose.Schema(
   {
-    escolaId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Escola",
-      required: [true, "A atividade deve estar vinculada a uma escola"],
-      index: true,
-    },
     professorId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Professor",

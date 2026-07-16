@@ -2,12 +2,6 @@ import mongoose from "mongoose";
 
 const planoDeAulaSchema = new mongoose.Schema(
   {
-    escolaId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Escola",
-      required: [true, "O plano de aula deve estar vinculado a uma escola"],
-      index: true,
-    },
     professorId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Professor",
@@ -30,6 +24,11 @@ const planoDeAulaSchema = new mongoose.Schema(
       required: [true, "A descrição do plano de aula é obrigatória"],
       trim: true,
     },
+    status: {
+      type: String,
+      enum: ["andamento", "concluido", "pendente", "expirada"],
+      required: true,
+    },
     urlPlanoDeAula: {
       type: String,
       default: "https://caminho-para-plano-de-aula-padrao.com/plano.pdf",
@@ -38,4 +37,4 @@ const planoDeAulaSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("PlanoDeAula", planoDeAulaSchema, "planosDeAula");
+export default mongoose.model("PlanoDeAula", planoDeAulaSchema, "planos_de_aula");

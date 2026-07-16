@@ -7,8 +7,6 @@ class TurmaController {
     try {
       const dadosTurma = req.body;
 
-      dadosTurma.escolaId = req.usuario.escolaId;
-
       const novaTurma = await TurmaService.registrar(dadosTurma);
 
       return res.status(201).json({
@@ -24,7 +22,7 @@ class TurmaController {
   // 2. READ ALL (GET /turmas)
   async listar(req, res) {
     try {
-      const turmas = await TurmaService.listarTodas(req.usuario.escolaId);
+      const turmas = await TurmaService.listarTodas();
       return res.status(200).json(turmas);
 
     } catch (error) {
@@ -36,7 +34,7 @@ class TurmaController {
   async buscarPorId(req, res) {
     try {
       const { id } = req.params;
-      const turma = await TurmaService.buscarPorId(id, req.usuario.escolaId);
+      const turma = await TurmaService.buscarPorId(id);
 
       return res.status(200).json(turma);
 
@@ -51,7 +49,7 @@ class TurmaController {
       const { id } = req.params;
       const dadosAtualizados = req.body;
 
-      const turmaAtualizada = await TurmaService.atualizar(id, dadosAtualizados, req.usuario.escolaId);
+      const turmaAtualizada = await TurmaService.atualizar(id, dadosAtualizados);
 
       return res.status(200).json({
         mensagem: "Os dados da turma foram atualizados com sucesso!",
@@ -67,7 +65,7 @@ class TurmaController {
   async deletar(req, res) {
     try {
       const { id } = req.params;
-      const resultado = await TurmaService.deletar(id, req.usuario.escolaId);
+      const resultado = await TurmaService.deletar(id);
 
       return res.status(200).json(resultado);
 

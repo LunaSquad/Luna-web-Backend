@@ -28,12 +28,6 @@ const alunoSchema = mongoose.Schema(
       required: [true, "O aluno deve estar vinculado a um usuário"],
       index: true,
     },
-    escolaId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Escola",
-      required: [true, "O aluno precisa estar vinculado a uma escola"],
-      index: true,
-    },
     turmaId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Turma",

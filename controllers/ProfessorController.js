@@ -8,8 +8,6 @@ class ProfessorController {
     try {
       const { dadosProfessor, dadosUsuario } = req.body;
 
-      dadosProfessor.escolaId = req.usuario.escolaId;
-
       if (req.file) {
         dadosProfessor.urlFotoProfessor = req.file.path;
       }
@@ -37,7 +35,7 @@ class ProfessorController {
   // 2. READ ALL (GET /professores)
   async listar(req, res) {
     try {
-      const professores = await ProfessorService.listarTodos(req.usuario.escolaId);
+      const professores = await ProfessorService.listarTodos();
       return res.status(200).json(professores);
 
     } catch (error) {
@@ -49,7 +47,7 @@ class ProfessorController {
   async buscarPorId(req, res) {
     try {
       const { id } = req.params;
-      const professor = await ProfessorService.buscarPorId(id, req.usuario.escolaId);
+      const professor = await ProfessorService.buscarPorId(id);
 
       return res.status(200).json(professor);
 
@@ -68,7 +66,7 @@ class ProfessorController {
         dadosAtualizados.urlFotoProfessor = req.file.path;
       }
 
-      const professorAtualizado = await ProfessorService.atualizar(id, dadosAtualizados, req.usuario.escolaId);
+      const professorAtualizado = await ProfessorService.atualizar(id, dadosAtualizados);
 
       return res.status(200).json({
         mensagem: "Os dados do professor foram atualizados com sucesso!",
@@ -84,7 +82,7 @@ class ProfessorController {
   async deletar(req, res) {
     try {
       const { id } = req.params;
-      const resultado = await ProfessorService.deletar(id, req.usuario.escolaId);
+      const resultado = await ProfessorService.deletar(id);
 
       return res.status(200).json(resultado);
 

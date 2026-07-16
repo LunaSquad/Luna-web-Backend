@@ -9,7 +9,6 @@ class TurmaService {
     try {
       const professorValido = await Professor.findOne({
         _id: dadosTurma.professorId,
-        escolaId: dadosTurma.escolaId
       });
 
       if (!professorValido) {
@@ -18,18 +17,16 @@ class TurmaService {
 
       const novaTurma = new Turma({
         nome: dadosTurma.nome,
-        escolaId: dadosTurma.escolaId,
         professorId: dadosTurma.professorId
       });
       const turmaSalva = await novaTurma.save();
 
-      if (dadosTurma.alunosIds && dadosTurma.alunosIds.length > 0) {
+      if (dadosTurma.alunosEmails && dadosTurma.alunosEmails.length > 0) {
         await Aluno.updateMany(
-          { _id: { $in: dadosTurma.alunosIds }, escolaId: dadosTurma.escolaId },
+          { email: { $in: dadosTurma.alunosEmails } },
           { $set: { turmaId: turmaSalva._id } }
         );
       }
-
       return turmaSalva;
 
     } catch (error) {
@@ -37,11 +34,11 @@ class TurmaService {
     }
 
   }
-  
+
 
   // 2. READ ALL - Método para listar todas as turmas
   async listarTodas(escolaId) {
-    const turmas = await Turma.find({ escolaId })
+    const turmas = await Turma.find()
       .populate("professorId", "nome sobrenome email")
       .lean();
 
@@ -63,9 +60,8 @@ class TurmaService {
 
 
   // 3. READ ONE - Método para buscar uma turma por ID
-  async buscarPorId(id, escolaId) {
-    const turma = await Turma.findOne({ _id: id, escolaId })
-      .populate("escolaId", "nome")
+  async buscarPorId(id) {
+    const turma = await Turma.findOne({ _id: id })
       .populate("professorId", "nome sobrenome");
 
     if (!turma) {
@@ -76,9 +72,9 @@ class TurmaService {
 
 
   // 4. UPDATE - Método para atualizar os dados da turma
-  async atualizar(id, dadosAtualizados, escolaId) {
+  async atualizar(id, dadosAtualizados) {
     const turmaAtualizada = await Turma.findOneAndUpdate(
-      { _id: id, escolaId },
+      { _id: id },
       { nome: dadosAtualizados.nome, professorId: dadosAtualizados.professorId },
       { new: true }
     );
@@ -86,11 +82,11 @@ class TurmaService {
     if (!turmaAtualizada) throw new Error("Turma não encontrada.");
 
     if (dadosAtualizados.alunosIds) {
-      await Aluno.updateMany({ turmaId: id, escolaId }, { $set: { turmaId: null } });
+      await Aluno.updateMany({ turmaId: id }, { $set: { turmaId: null } });
 
       if (dadosAtualizados.alunosIds.length > 0) {
         await Aluno.updateMany(
-          { _id: { $in: dadosAtualizados.alunosIds }, escolaId },
+          { _id: { $in: dadosAtualizados.alunosIds } },
           { $set: { turmaId: id } }
         );
       }
@@ -100,15 +96,15 @@ class TurmaService {
 
 
   // 5. DELETE - Método para excluir uma turma
-  async deletar(id, escolaId) {
-    const turma = await Turma.findOne({ _id: id, escolaId });
+  async deletar(id) {
+    const turma = await Turma.findOne({ _id: id });
 
     if (!turma) {
       throw new Error("Turma não encontrada para a exclusão.");
     }
 
     await Aluno.updateMany(
-      { turmaId: id, escolaId: escolaId },
+      { turmaId: id },
       { $set: { turmaId: null } }
     );
 

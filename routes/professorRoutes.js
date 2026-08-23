@@ -7,7 +7,7 @@ import { uploadProfessor } from "../middlewares/uploadImagem.js";
 const routes = Router();
 
 // 1. CREATE
-routes.post("/professores", auth, uploadProfessor.single('foto'), validarCadastroProfessor, ProfessorController.criar);
+routes.post("/professores", uploadProfessor.single('foto'), validarCadastroProfessor, ProfessorController.criar);
 
 // 2. READ ALL
 routes.get("/professores", auth, ProfessorController.listar);

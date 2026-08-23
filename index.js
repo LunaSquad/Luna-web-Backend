@@ -5,12 +5,12 @@ import dotenv from "dotenv";
 import cors from "cors";
 
 // Imports de Rotas
-import escolaRoutes from './routes/escolaRoutes.js';
 import professorRoutes from './routes/professorRoutes.js';
 import materiaRoutes from './routes/materiaRoutes.js';
 import turmaRoutes from './routes/turmaRoutes.js';
 import alunoRoutes from './routes/alunoRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import planoDeAulaRoutes from "./routes/planoDeAulaRoutes.js";
 
 // Configurando os servidores DNS
 import dns from 'dns';
@@ -25,12 +25,12 @@ app.use(express.json())
 app.use(cors())
 
 // Configurando as rotas
-app.use('/', escolaRoutes);
 app.use('/', professorRoutes);
 app.use('/', materiaRoutes);
 app.use('/', turmaRoutes);
 app.use('/', alunoRoutes);
 app.use('/', authRoutes);
+app.use("/", planoDeAulaRoutes);
 
 // Iniciando a conexão com o banco de dados MongoDB
 const DB_Connection = process.env.DB_URL;

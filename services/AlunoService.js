@@ -39,9 +39,9 @@ class AlunoService {
 
 
   // 2. READ ALL - Método para listar todos os alunos
-  async listarTodos(escolaId, semTurma = false, incluirTurmaId = null) {
+  async listarTodos(semTurma = false, incluirTurmaId = null) {
     try {
-      const filtro = { escolaId };
+      const filtro = {};
 
       if (semTurma) {
         if (incluirTurmaId && mongoose.Types.ObjectId.isValid(incluirTurmaId)) {
@@ -64,10 +64,9 @@ class AlunoService {
 
 
   // 3. READ ONE - Método para buscar um aluno por ID
-  async buscarPorId(id, escolaId) {
-    const aluno = await Aluno.findOne({ _id: id, escolaId })
+  async buscarPorId(id) {
+    const aluno = await Aluno.findOne({ _id: id })
       .populate("usuarioId", "email tipoUser")
-      .populate("escolaId", "nome")
       .populate("turmaId", "nome");
 
     if (!aluno) {
@@ -78,8 +77,8 @@ class AlunoService {
 
 
   // 4. UPDATE - Método para atualizar os dados do aluno
-  async atualizar(id, dadosAtualizados, escolaId) {
-    const alunoAtual = await Aluno.findOne({ _id: id, escolaId });
+  async atualizar(id, dadosAtualizados) {
+    const alunoAtual = await Aluno.findOne({ _id: id });
 
     if (!alunoAtual) {
       throw new Error("Aluno não encontrado para a atualização.");
@@ -109,7 +108,7 @@ class AlunoService {
       }
     }
     const alunoAtualizado = await Aluno.findOneAndUpdate(
-      { _id: id, escolaId },
+      { _id: id },
       dadosAtualizados,
       { new: true }
     );
@@ -122,8 +121,8 @@ class AlunoService {
 
 
   // 5. DELETE - Método para excluir um aluno
-  async deletar(id, escolaId) {
-    const aluno = await Aluno.findOne({ _id: id, escolaId });
+  async deletar(id) {
+    const aluno = await Aluno.findOne({ _id: id });
 
     if (!aluno) {
       throw new Error("Aluno não encontrado para a exclusão.");

@@ -7,8 +7,6 @@ class AlunoController {
     try {
       const { dadosAluno, dadosUsuario } = req.body;
 
-      dadosAluno.escolaId = req.usuario.escolaId;
-
       if (req.files) {
         if (req.files["foto"]) {
           dadosAluno.urlFotoAluno = req.files["foto"][0].path;
@@ -47,11 +45,9 @@ class AlunoController {
   // 2. READ ALL (GET /alunos)
   async listar(req, res) {
     try {
-      const { escolaId } = req.usuario;
       const { semTurma, turmaId } = req.query;
 
       const alunos = await AlunoService.listarTodos(
-        escolaId,
         semTurma === 'true',
         turmaId
       );
@@ -67,7 +63,7 @@ class AlunoController {
   async buscarPorId(req, res) {
     try {
       const { id } = req.params;
-      const aluno = await AlunoService.buscarPorId(id, req.usuario.escolaId);
+      const aluno = await AlunoService.buscarPorId(id);
 
       return res.status(200).json(aluno);
     } catch (error) {
@@ -92,8 +88,7 @@ class AlunoController {
 
       const alunoAtualizado = await AlunoService.atualizar(
         id,
-        dadosAtualizados,
-        req.usuario.escolaId,
+        dadosAtualizados
       );
 
       return res.status(200).json({
@@ -109,7 +104,7 @@ class AlunoController {
   async deletar(req, res) {
     try {
       const { id } = req.params;
-      const resultado = await AlunoService.deletar(id, req.usuario.escolaId);
+      const resultado = await AlunoService.deletar(id);
 
       return res.status(200).json(resultado);
     } catch (error) {

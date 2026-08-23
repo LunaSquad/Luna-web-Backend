@@ -30,5 +30,5 @@ const criarUploader = (nomeDaPasta) => {
 
 export const uploadProfessor = criarUploader('professores');
 export const uploadAluno = criarUploader('alunos');
-export const uploadEscola = criarUploader('escolas');
 export const uploadDocumento = criarUploader('documentos');
+export const uploadPlanoDeAula = criarUploader('planos_de_aula');

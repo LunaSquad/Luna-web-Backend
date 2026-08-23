@@ -1,5 +1,4 @@
 import Usuario from "../models/Usuario.js";
-import Escola from "../models/Escola.js";
 import Professor from "../models/Professor.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -17,7 +16,7 @@ class AuthController {
 
       if (usuario.tipoUser === "aluno") {
         return res.status(403).json({
-          erro: "Acesso negado. O Web é restrito para Escolas e Professores. Por favor, utilize o aplicativo móvel."
+          erro: "Acesso negado. O Web é restrito para Professores. Por favor, utilize o aplicativo móvel."
         });
       }
 
@@ -26,36 +25,17 @@ class AuthController {
         return res.status(401).json({ erro: "E-mail ou senha inválidos." });
       }
 
-      let escolaId = null;
-      let nomePerfil = "";
-      let fotoPerfil = "";
-
-      if (usuario.tipoUser === "escola") {
-        const escola = await Escola.findOne({ usuarioId: usuario._id });
-        if (escola) {
-          escolaId = escola._id;
-          nomePerfil = escola.nome;
-          fotoPerfil = escola.urlFotoEscola; 
-        }
-      } else if (usuario.tipoUser === "professor") {
-        const professor = await Professor.findOne({ usuarioId: usuario._id });
-        if (professor) {
-          escolaId = professor.escolaId;
-          nomePerfil = professor.nome;
-          fotoPerfil = professor.urlFotoProfessor;
-        }
-      }
-
-      if (!escolaId) {
+      const professor = await Professor.findOne({ usuarioId: usuario._id });
+      if (!professor) {
         return res.status(500).json({ erro: "Erro de integridade: Perfil associado não encontrado." });
       }
 
       // Geração do Token JWT
       const token = jwt.sign(
-        {
-          id: usuario._id,
-          tipoUser: usuario.tipoUser,
-          escolaId: escolaId
+        { 
+          id: usuario._id, 
+          tipoUser: usuario.tipoUser, 
+          professorId: professor._id 
         },
         process.env.JWT_SECRET,
         { expiresIn: "1d" } // Token expira em 24 horas
@@ -69,9 +49,8 @@ class AuthController {
           id: usuario._id,
           email: usuario.email,
           tipoUser: usuario.tipoUser,
-          escolaId: escolaId,
-          nome: nomePerfil,
-          foto: fotoPerfil
+          nome: professor.nome,
+          foto: professor.urlFotoProfessor
         }
       });
 

@@ -41,18 +41,16 @@ class ProfessorService {
 
 
   // 2. READ ALL - Método para listar todos os professores
-  async listarTodos(escolaId) {
-    return await Professor.find({ escolaId })
+  async listarTodos() {
+    return await Professor.find()
       .populate("usuarioId", "email tipoUser")
-      .populate("escolaId", "nome cnpj");
   }
 
 
   // 3. READ ONE - Métodos para buscar um professor por ID
-  async buscarPorId(id, escolaId) {
-    const professor = await Professor.findOne({ _id: id, escolaId })
+  async buscarPorId(id) {
+    const professor = await Professor.findOne({ _id: id })
       .populate("usuarioId", "email tipoUser")
-      .populate("escolaId", "nome");
 
     if (!professor) {
       throw new Error("Professor não encontrado.");
@@ -62,8 +60,8 @@ class ProfessorService {
 
 
   // 4. UPDATE - Método para atualizar os dados do professor
-  async atualizar(id, dadosAtualizados, escolaId) {
-    const professorAtual = await Professor.findOne({ _id: id, escolaId });
+  async atualizar(id, dadosAtualizados) {
+    const professorAtual = await Professor.findOne({ _id: id });
 
     if (!professorAtual) {
       throw new Error("Professor não encontrado para a atualização.");
@@ -83,7 +81,7 @@ class ProfessorService {
     }
 
     const professorAtualizado = await Professor.findOneAndUpdate(
-      { _id: id, escolaId },
+      { _id: id },
       dadosAtualizados,
       { new: true }
     );
@@ -96,8 +94,8 @@ class ProfessorService {
 
 
   // 5. DELETE - Método para excluir um professor
-  async deletar(id, escolaId) {
-    const professor = await Professor.findOne({ _id: id, escolaId });
+  async deletar(id) {
+    const professor = await Professor.findOne({ _id: id });
 
     if (!professor) {
       throw new Error("Professor não encontrado para a exclusão.");

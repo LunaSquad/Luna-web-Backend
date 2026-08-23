@@ -8,12 +8,6 @@ const professorSchema = new mongoose.Schema(
       required: [true, "O professor deve estar vinculado a um usuário"],
       index: true,
     },
-    escolaId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Escola",
-      required: [true, "O professor precisa estar vinculado a uma escola"],
-      index: true,
-    },
     nome: {
       type: String,
       required: [true, "O nome do professor é obrigatório"],

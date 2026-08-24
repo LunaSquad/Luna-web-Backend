@@ -12,6 +12,11 @@ const turmaSchema = new mongoose.Schema(
       ref: "Professor",
       default: null,
     },
+    codigoConvite: {
+      type: String,
+      unique: true,
+      default: () => Math.random().toString(36).substring(2, 8).toUpperCase()
+    },
   },
   { timestamps: true }
 );

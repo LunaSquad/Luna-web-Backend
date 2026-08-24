@@ -6,12 +6,14 @@ class TurmaController {
   async criar(req, res) {
     try {
       const dadosTurma = req.body;
-
       const novaTurma = await TurmaService.registrar(dadosTurma);
+
+      const linkConvite = `luna://app/convite?codigo=${novaTurma.codigoConvite}&turmaId=${novaTurma._id}`;
 
       return res.status(201).json({
         mensagem: "Turma registrada com sucesso!",
-        turma: novaTurma
+        turma: novaTurma,
+        linkConvite: linkConvite
       });
 
     } catch (error) {
@@ -36,7 +38,12 @@ class TurmaController {
       const { id } = req.params;
       const turma = await TurmaService.buscarPorId(id);
 
-      return res.status(200).json(turma);
+      const linkConvite = `luna://app/convite?codigo=${turma.codigoConvite}&turmaId=${turma._id}`;
+
+      return res.status(200).json({
+        ...turma.toObject(),
+        linkConvite: linkConvite
+      });
 
     } catch (error) {
       return res.status(404).json({ erro: "Turma não encontrada." });

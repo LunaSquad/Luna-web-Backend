@@ -1,5 +1,5 @@
-import Usuario from "../models/Usuario.js";
-import Professor from "../models/Professor.js";
+import Usuario from "../models/usuario.model.js";
+import Professor from "../models/professor.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 

@@ -1,4 +1,4 @@
-import Materia from '../models/Materia.js';
+import Materia from '../models/materia.model.js';
 
 class MateriaService {
 

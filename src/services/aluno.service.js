@@ -1,6 +1,6 @@
-import Aluno from '../models/Aluno.js';
-import Usuario from '../models/Usuario.js';
-import UsuarioService from "./UsuarioService.js";
+import Aluno from '../models/aluno.model.js';
+import Usuario from '../models/usuario.model.js';
+import UsuarioService from "./usuario.service.js";
 import { v2 as cloudinary } from 'cloudinary';
 import dotenv from 'dotenv';
 import mongoose from "mongoose";

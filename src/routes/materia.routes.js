@@ -1,5 +1,5 @@
 import { Router } from "express";
-import MateriaController from "../controllers/MateriaController.js";
+import MateriaController from "../controllers/materia.controller.js";
 import { auth } from "../middlewares/auth.js";
 
 const routes = Router();

@@ -1,30 +1,21 @@
-// Imports
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
+import professorRoutes from './routes/professor.routes.js';
+import materiaRoutes from './routes/materia.routes.js';
+import turmaRoutes from './routes/turma.routes.js';
+import alunoRoutes from './routes/aluno.routes.js';
+import authRoutes from './routes/auth.routes.js';
+import planoDeAulaRoutes from "./routes/plano-de-aula.routes.js";
 
-// Imports de Rotas
-import professorRoutes from './routes/professorRoutes.js';
-import materiaRoutes from './routes/materiaRoutes.js';
-import turmaRoutes from './routes/turmaRoutes.js';
-import alunoRoutes from './routes/alunoRoutes.js';
-import authRoutes from './routes/authRoutes.js';
-import planoDeAulaRoutes from "./routes/planoDeAulaRoutes.js";
-
-// Configurando os servidores DNS
 import dns from 'dns';
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
-
-// Configs
 const app = express();
 dotenv.config();
-
-// Configurando o Express
 app.use(express.json())
 app.use(cors())
 
-// Configurando as rotas
 app.use('/', professorRoutes);
 app.use('/', materiaRoutes);
 app.use('/', turmaRoutes);
@@ -32,7 +23,6 @@ app.use('/', alunoRoutes);
 app.use('/', authRoutes);
 app.use("/", planoDeAulaRoutes);
 
-// Iniciando a conexão com o banco de dados MongoDB
 const DB_Connection = process.env.DB_URL;
 
 mongoose.connect(DB_Connection)
@@ -43,7 +33,6 @@ mongoose.connect(DB_Connection)
     console.error("Erro ao conectar ao MongoDB:", error);
   });
 
-// Rodando a API na porta 4000
 const port = 4000;
 app.listen(port, (error) => {
   if (error) {
@@ -51,4 +40,4 @@ app.listen(port, (error) => {
   } else {
     console.log(`API Rodando em http://localhost:${port}`);
   }
-})
+});

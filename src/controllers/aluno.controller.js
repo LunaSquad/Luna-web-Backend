@@ -1,5 +1,5 @@
 import { v2 as cloudinary } from 'cloudinary';
-import AlunoService from "../services/AlunoService.js";
+import AlunoService from "../services/aluno.service.js";
 
 class AlunoController {
   // 1. CREATE (POST /alunos)

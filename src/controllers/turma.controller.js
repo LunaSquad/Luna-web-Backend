@@ -1,4 +1,4 @@
-import TurmaService from "../services/TurmaService.js";
+import TurmaService from "../services/turma.service.js";
 
 class TurmaController {
 

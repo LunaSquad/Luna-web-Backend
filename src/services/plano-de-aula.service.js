@@ -1,4 +1,4 @@
-import PlanoDeAula from "../models/PlanoDeAula.js";
+import PlanoDeAula from "../models/plano-de-aula.model.js";
 import { v2 as cloudinary } from 'cloudinary';
 import dotenv from 'dotenv';
 

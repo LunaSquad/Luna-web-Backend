@@ -1,8 +1,8 @@
 import { Router } from "express";
-import ProfessorController from "../controllers/ProfessorController.js";
-import { validarCadastroProfessor, validarUpdateProfessor } from "../middlewares/validarProfessor.js";
+import ProfessorController from "../controllers/professor.controller.js";
+import { validarCadastroProfessor, validarUpdateProfessor } from "../middlewares/validar-professor.js";
 import { auth } from "../middlewares/auth.js";
-import { uploadProfessor } from "../middlewares/uploadImagem.js";
+import { uploadProfessor } from "../middlewares/upload-imagem.js";
 
 const routes = Router();
 

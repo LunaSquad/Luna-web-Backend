@@ -1,5 +1,5 @@
 import { v2 as cloudinary } from 'cloudinary';
-import ProfessorService from "../services/ProfessorService.js";
+import ProfessorService from "../services/professor.service.js";
 
 class ProfessorController {
 

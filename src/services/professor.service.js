@@ -1,8 +1,8 @@
-import Professor from '../models/Professor.js';
-import Usuario from '../models/Usuario.js';
-import Turma from '../models/Turma.js';
-import Aluno from '../models/Aluno.js';
-import UsuarioService from "./UsuarioService.js";
+import Professor from '../models/professor.model.js';
+import Usuario from '../models/usuario.model.js';
+import Turma from '../models/turma.model.js';
+import Aluno from '../models/aluno.model.js';
+import UsuarioService from "./usuario.service.js";
 import { v2 as cloudinary } from 'cloudinary';
 import dotenv from 'dotenv';
 

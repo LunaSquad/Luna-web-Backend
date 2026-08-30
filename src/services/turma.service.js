@@ -1,6 +1,6 @@
-import Turma from '../models/Turma.js';
-import Professor from '../models/Professor.js';
-import Aluno from '../models/Aluno.js';
+import Turma from '../models/turma.model.js';
+import Professor from '../models/professor.model.js';
+import Aluno from '../models/aluno.model.js';
 
 class TurmaService {
 

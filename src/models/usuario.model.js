@@ -19,7 +19,7 @@ const usuarioSchema = new mongoose.Schema(
     },
     tipoUser: {
       type: String,
-      enum: ["professor", "aluno"], // Restringe as opções aceitas
+      enum: ["professor", "aluno"],
       required: true,
     },
   },

@@ -1,8 +1,8 @@
 import { Router } from "express";
-import PlanoDeAulaController from "../controllers/PlanoDeAulaController.js";
+import PlanoDeAulaController from "../controllers/plano-de-aula.controller.js";
 import { auth } from "../middlewares/auth.js";
-import { validarCadastroPlanoDeAula, validarUpdatePlanoDeAula } from "../middlewares/validarPlanoDeAula.js";
-import { uploadPlanoDeAula } from "../middlewares/uploadImagem.js";
+import { validarCadastroPlanoDeAula, validarUpdatePlanoDeAula } from "../middlewares/validar-plano-de-aula.js";
+import { uploadPlanoDeAula } from "../middlewares/upload-imagem.js";
 
 const routes = Router();
 

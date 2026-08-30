@@ -1,4 +1,4 @@
-import PlanoDeAulaService from "../services/PlanoDeAulaService.js";
+import PlanoDeAulaService from "../services/plano-de-aula.service.js";
 
 class PlanoDeAulaController {
   async criar(req, res) {
